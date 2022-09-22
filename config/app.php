@@ -214,6 +214,9 @@ return [
 
     'api_endpoints' => [
         'check_user' => env('CHECK_USER_ENDPOINT'),
+        'check_department_app' => env('CHECK_USER_DEPARTMENT_APP'),
+        'check_department_token' => env('CHECK_USER_DEPARTMENT_TOKEN'),
+        'check_department' => env('CHECK_USER_DEPARTMENT')
     ]
 
 ];

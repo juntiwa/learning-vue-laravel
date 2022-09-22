@@ -23,9 +23,10 @@ Route::get('/about', function () {
 Route::get('/users', function () {
     return Inertia::render('User/Role');
 });
-Route::get('/api', function () {
-   return Inertia::render('About');
-})->middleware('cors');
+//Route::get('/api', function () {
+//    return Inertia::render('About');
+//})->middleware('cors');
+
 Route::get('/user-api', function () {
     return Inertia::render('Users');
 });
@@ -36,5 +37,24 @@ Route::post('/check-user', function () {
         ['employeeID' => request()->input('id')]
     );
 
-    return $response->json();
+    $data = $response->json();
+
+    $header = ['app' => config('app.api_endpoints.check_department_app'),
+        'token' => config('app.api_endpoints.check_department_token')];
+    $url = config('app.api_endpoints.check_department');
+
+    $result = Http::withHeaders($header)->post($url, ['login' => $data['AccountName']]);
+    return $result->json();
+
 })->name('check-user');
+
+Route::post('/save-user',function () {
+    $validated = request()->validate([
+        'sap_id' => 'required',
+        'login' => 'required',
+        'full_name' => 'required',
+        'role' => 'required'
+    ]);
+    \App\Models\User::create($validated);
+    return $validated;
+})->name('save-user');
